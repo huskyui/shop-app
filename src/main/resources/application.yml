@@ -6,5 +6,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shop?useUnicode=true&useSSL=false&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: root
-    password: happyday
+    password: root
+#jwt配置
+jwt:
+  expire_time: 3600000
+  secret: e3aed01308280829b7c321cc4fbafce4
 
