@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
 
 spring:
   datasource:
@@ -11,4 +11,5 @@ spring:
 jwt:
   expire_time: 3600000
   secret: e3aed01308280829b7c321cc4fbafce4
+debug: true
 
