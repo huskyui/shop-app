@@ -3,17 +3,14 @@ package com.husky.shopapp.util;
 import com.google.common.base.Strings;
 import com.sun.org.apache.xml.internal.security.exceptions.Base64DecodingException;
 import com.sun.org.apache.xml.internal.security.utils.Base64;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.TextCodec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import sun.security.krb5.EncryptionKey;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.security.PrivateKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +33,22 @@ public class JwtUtil {
      * */
     private static String SECRET;
 
+    public  String getAuthPath() {
+        return AUTH_PATH;
+    }
+
+    /**
+     * auth_path
+     * 授权路径
+     * */
+    private static String AUTH_PATH;
+
+    /**
+     * auth_header
+     * 前段头部
+     * */
+    private static String AUTH_HEADER;
+
 
     @Value("${jwt.expire_time}")
     public void setExpiretionTime(long expiretionTime){
@@ -47,6 +60,21 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     public void setSECRET(String secret){
         SECRET = secret;
+    }
+
+    @Value("${jwt.auth_path}")
+    public  void setAuthPath(String authPath) {
+        AUTH_PATH = authPath;
+    }
+
+
+    public static String getAuthHeader() {
+        return AUTH_HEADER;
+    }
+
+    @Value("${jwt.auth_header}")
+    public  void setAuthHeader(String authHeader) {
+        AUTH_HEADER = authHeader;
     }
 
     public static SecretKey generalKey() {
@@ -92,6 +120,35 @@ public class JwtUtil {
             }
         }else{
             throw new TokenValidationException("token无效");
+        }
+    }
+
+
+    /**
+     * 获取jwt的payload部分
+     * */
+    public static Claims getClaimFromToken(String token){
+        SecretKey secret = generalKey();
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public static Date getExpiretionDateFromToken(String token){
+        return getClaimFromToken(token).getExpiration();
+    }
+
+
+    /**
+     * 验证token是否过期
+     * */
+    public static Boolean isTokenExpired(String token){
+        try{
+            final Date expiredDate = getExpiretionDateFromToken(token);
+            return expiredDate.before(new Date());
+        }catch (ExpiredJwtException expiredJwtException){
+            return true;
         }
     }
 
