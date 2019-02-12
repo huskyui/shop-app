@@ -26,12 +26,12 @@ public class JwtUtil {
      * EXPIRETION_TIME
      * 过期时间
      * */
-    private static long EXPIRETION_TIME;
+    public static long EXPIRETION_TIME;
     /**
      * SECRET
      * 密钥
      * */
-    private static String SECRET;
+    public static String SECRET;
 
     public  String getAuthPath() {
         return AUTH_PATH;
@@ -41,13 +41,13 @@ public class JwtUtil {
      * auth_path
      * 授权路径
      * */
-    private static String AUTH_PATH;
+    public static String AUTH_PATH;
 
     /**
      * auth_header
      * 前段头部
      * */
-    private static String AUTH_HEADER;
+    public static String AUTH_HEADER;
 
 
     @Value("${jwt.expire_time}")
