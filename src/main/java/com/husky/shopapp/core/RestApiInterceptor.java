@@ -1,32 +1,25 @@
 package com.husky.shopapp.core;
-
-
-
 import com.google.common.base.Strings;
-import com.husky.shopapp.entity.Result;
 import com.husky.shopapp.util.JwtUtil;
 import com.husky.shopapp.util.RenderUtil;
 import com.husky.shopapp.util.ResultUtil;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
-
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 /**
  * @author huskyui
  * @date 2019-1-25
  */
+
 public class RestApiInterceptor extends HandlerInterceptorAdapter {
+    private String USER_NAME = "User-Name";
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
 
@@ -40,13 +33,15 @@ public class RestApiInterceptor extends HandlerInterceptorAdapter {
 
     private boolean check(HttpServletRequest request,HttpServletResponse response){
         log.info("当前拦截器拦截路径"+request.getServletPath());
+        StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         //如果是登录界面
         if(request.getServletPath().equals(JwtUtil.AUTH_PATH)){
             return true;
         }
         final String token = request.getHeader(JwtUtil.AUTH_HEADER);
+        final String userName = request.getHeader(USER_NAME);
         log.info("token:" + token);
-        if(!Strings.isNullOrEmpty(token)){
+        if(!Strings.isNullOrEmpty(token)&&!Strings.isNullOrEmpty(userName)){
             try{
                 boolean flag = JwtUtil.isTokenExpired(token);
                 //此处超时，需要加入redis，redis里面缓存有效的token
@@ -60,7 +55,7 @@ public class RestApiInterceptor extends HandlerInterceptorAdapter {
             }
         }else{
             //header里面并没有携带token,response返回数据
-            RenderUtil.renderJson(response,ResultUtil.setErrorResult("token不存在"));
+            RenderUtil.renderJson(response,ResultUtil.setErrorResult("token或userId不存在"));
             return false;
         }
         return true;
