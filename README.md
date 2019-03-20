@@ -20,3 +20,9 @@
     后端，每次请求的头部都带有token以及userId
     如果有部分controller接口需要获取用户信息，
     可以通过request获取相关信息。    
+### 拦截器部分
+    registry.addInterceptor(new RestApiInterceptor())
+                    .addPathPatterns("/**").excludePathPatterns("/api/**");
+     addPathPatterns是配置拦截的路径
+     excludePathPatterns是配置不拦截的路径
+     
