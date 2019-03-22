@@ -49,7 +49,6 @@ public class JwtUtil {
      * */
     public static String AUTH_HEADER;
 
-
     @Value("${jwt.expire_time}")
     public void setExpiretionTime(long expiretionTime){
         EXPIRETION_TIME = expiretionTime;
@@ -123,7 +122,6 @@ public class JwtUtil {
         }
     }
 
-
     /**
      * 获取jwt的payload部分
      * */
@@ -139,7 +137,6 @@ public class JwtUtil {
         return getClaimFromToken(token).getExpiration();
     }
 
-
     /**
      * 验证token是否过期
      * */
@@ -152,16 +149,13 @@ public class JwtUtil {
         }
     }
 
-
     public static long getExpiretionTime(){
         return JwtUtil.EXPIRETION_TIME;
     }
 
-    static class TokenValidationException extends RuntimeException{
-        public TokenValidationException(String msg){
+    static class TokenValidationException extends RuntimeException {
+        public TokenValidationException(String msg) {
             super(msg);
         }
     }
-
-
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.husky.shopapp.mapper.CommentMapper">
+    <resultMap id="commentDtoMap" type="com.husky.shopapp.dto.CommentDto">
+        <result column="username" property="username"/>
+        <result column="createtime" property="createtime"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <select id="getCommentList" resultMap="commentDtoMap">
+        SELECT c.content,c.`createtime` ,IFNULL(u.`user_name`,"匿名用户") AS username FROM COMMENT c LEFT JOIN USER u ON  c.`user_id` = u.`user_id`  WHERE c.`foreign_id` = #{foreignId}
+        ORDER BY c.`createtime` ASC LIMIT #{start},#{step}
+    </select>
+</mapper>
