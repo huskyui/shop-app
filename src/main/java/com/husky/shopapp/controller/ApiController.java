@@ -3,10 +3,7 @@ package com.husky.shopapp.controller;
 import com.husky.shopapp.dto.CommentDto;
 import com.husky.shopapp.dto.NewsDto;
 import com.husky.shopapp.entity.*;
-import com.husky.shopapp.service.ICarouseInfoService;
-import com.husky.shopapp.service.ICommentService;
-import com.husky.shopapp.service.INewsBriefService;
-import com.husky.shopapp.service.INewsService;
+import com.husky.shopapp.service.*;
 import com.husky.shopapp.util.ResultUtil;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +29,8 @@ public class ApiController {
     private INewsService newsService;
     @Resource
     private ICommentService commentService;
+    @Resource
+    private IGoodsService goodsService;
 
     /**
      * 获取录播图信息
@@ -117,5 +116,18 @@ public class ApiController {
             return ResultUtil.setSuccessResult("插入成功");
         }
 
+    }
+
+    /**
+     * 获取商品
+     * */
+    @RequestMapping("/getGoodsList")
+    public Result getGoodsList(@RequestParam("pageIndex")Integer pageIndex){
+        List<Goods> goodsList = goodsService.getListByPageIndex(pageIndex);
+        return Result.builder()
+                .success(true)
+                .msg("成功")
+                .data(goodsList)
+                .build();
     }
 }
