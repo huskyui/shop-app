@@ -1,5 +1,6 @@
 package com.husky.shopapp.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.husky.shopapp.dto.CommentDto;
 import com.husky.shopapp.dto.NewsDto;
 import com.husky.shopapp.entity.*;
@@ -36,8 +37,8 @@ public class ApiController {
      * 获取录播图信息
      * */
     @RequestMapping("/carouselInfo")
-    public Result getCarouseInfo(){
-        List<CarouseInfo> carouseInfoList = carouseInfoService.list();
+    public Result getCarouseInfo(@RequestParam(value = "goodsId",defaultValue = "-1") Integer goodsId){
+        List<CarouseInfo> carouseInfoList = carouseInfoService.list(new QueryWrapper<CarouseInfo>().eq("goods_id",goodsId));
         return Result.builder()
                 .success(true)
                 .msg("获取成功")
@@ -87,8 +88,9 @@ public class ApiController {
      * */
     @RequestMapping("/getCommentList/{foreignId}")
     public Result getCommentList(@PathVariable("foreignId")Integer foreignId,
-                                 @RequestParam("pageIndex")Integer pageIndex){
-        List<CommentDto> commentDtoList = commentService.getCommentList(foreignId,pageIndex);
+                                 @RequestParam("pageIndex")Integer pageIndex,
+                                 @RequestParam("type")Integer type){
+        List<CommentDto> commentDtoList = commentService.getCommentList(foreignId,type,pageIndex);
         return Result.builder()
                 .success(true)
                 .msg("成功")
@@ -119,7 +121,7 @@ public class ApiController {
     }
 
     /**
-     * 获取商品
+     * 获取商品列表
      * */
     @RequestMapping("/getGoodsList")
     public Result getGoodsList(@RequestParam("pageIndex")Integer pageIndex){
@@ -130,4 +132,18 @@ public class ApiController {
                 .data(goodsList)
                 .build();
     }
+
+    /**
+     * 获取商品详细
+     * */
+    @RequestMapping("/getGoodsInfo")
+    public Result getGoodsInfo(@RequestParam("goodsId")Integer goodsId){
+        Goods goods= goodsService.getById(goodsId);
+        return Result.builder()
+                .success(true)
+                .msg("成功")
+                .data(goods)
+                .build();
+    }
+
 }

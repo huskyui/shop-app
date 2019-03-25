@@ -20,7 +20,8 @@ public interface ICommentService extends IService<Comment> {
      * 获取评论列表
      * @param foreignId 外键
      * @param pageIndex 页数
+     * @param type 评论类型
      * @return List<CommentDto>
      */
-    List<CommentDto> getCommentList(Integer foreignId,Integer pageIndex);
+    List<CommentDto> getCommentList(Integer foreignId,Integer type,Integer pageIndex);
 }

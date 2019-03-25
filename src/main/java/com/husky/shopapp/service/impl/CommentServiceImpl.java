@@ -25,8 +25,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private CommentMapper commentMapper;
 
     @Override
-    public List<CommentDto> getCommentList(Integer foreignId,Integer pageIndex) {
+    public List<CommentDto> getCommentList(Integer foreignId,Integer type,Integer pageIndex) {
         Integer start = (pageIndex -1) * STEP;
-        return commentMapper.getCommentList(foreignId,start,STEP);
+        return commentMapper.getCommentList(foreignId,type,start,STEP);
     }
 }

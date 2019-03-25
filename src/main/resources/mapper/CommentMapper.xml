@@ -9,6 +9,7 @@
 
     <select id="getCommentList" resultMap="commentDtoMap">
         SELECT c.content,c.`createtime` ,IFNULL(u.`user_name`,"匿名用户") AS username FROM COMMENT c LEFT JOIN USER u ON  c.`user_id` = u.`user_id`  WHERE c.`foreign_id` = #{foreignId}
+        and c.type = #{type}
         ORDER BY c.`createtime` ASC LIMIT #{start},#{step}
     </select>
 </mapper>

@@ -22,5 +22,5 @@ public interface CommentMapper extends BaseMapper<Comment> {
      * @param step 步数
      * @return List<CommentDto>
      */
-    List<CommentDto> getCommentList(@Param("foreignId")Integer foreignId, @Param("start")Integer start, @Param("step")Integer step);
+    List<CommentDto> getCommentList(@Param("foreignId")Integer foreignId,@Param("type")Integer type, @Param("start")Integer start, @Param("step")Integer step);
 }

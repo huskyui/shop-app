@@ -39,5 +39,9 @@ public class CarouseInfo implements Serializable {
      */
     private LocalDateTime createtime;
 
+    /**
+     * type -1为首页轮播图地址
+     * */
+    private Integer goodsId;
 
 }

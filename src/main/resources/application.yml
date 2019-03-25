@@ -20,6 +20,8 @@ jwt:
   auth_path: /user/login
   auth_header: Authorization
 debug: true
-
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
+logging:
+  level:
+    com.husky: DEBUG
