@@ -2,6 +2,8 @@ package com.husky.shopapp.controller;
 
 import com.google.common.base.Strings;
 import com.husky.shopapp.entity.Result;
+import com.husky.shopapp.entity.User;
+import com.husky.shopapp.service.IUserService;
 import com.husky.shopapp.util.JwtUtil;
 import com.husky.shopapp.util.ResultUtil;
 import com.husky.shopapp.vo.UserTokenVO;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+
 /**
  * @author huskyui
  * @date 2019-1-23
@@ -20,8 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    @Resource
     private StringRedisTemplate stringRedisTemplate;
+    @Resource
+    private IUserService userService;
 
 
     @RequestMapping("/login")
@@ -43,12 +49,25 @@ public class UserController {
 
     }
 
-
     @ResponseBody
     @RequestMapping("/check")
     public Result tokenCheck(@RequestParam(value = "token",defaultValue = "")String token){
         Integer id = JwtUtil.validateToken(token);
         return ResultUtil.setResult(true,"成功",id);
     }
+
+    @ResponseBody
+    @RequestMapping("/getUserInfo")
+    public Result getUserInfo(@RequestParam("userId")Integer userId){
+        User user = userService.getById(userId);
+        return Result.builder()
+                .success(true)
+                .msg("获取成功")
+                .data(user)
+                .build();
+    }
+
+
+
 
 }

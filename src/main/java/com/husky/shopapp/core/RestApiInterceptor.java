@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 public class RestApiInterceptor extends HandlerInterceptorAdapter {
-    private String USER_NAME = "User-Name";
+    private String USER_ID = "UserId";
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
 
@@ -39,9 +39,9 @@ public class RestApiInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         final String token = request.getHeader(JwtUtil.AUTH_HEADER);
-        final String userName = request.getHeader(USER_NAME);
+        final Integer userId = Integer.parseInt(request.getHeader(USER_ID));
         log.info("token:" + token);
-        if(!Strings.isNullOrEmpty(token)&&!Strings.isNullOrEmpty(userName)){
+        if(!Strings.isNullOrEmpty(token)){
             try{
                 boolean flag = JwtUtil.isTokenExpired(token);
                 //此处超时，需要加入redis，redis里面缓存有效的token
@@ -58,6 +58,7 @@ public class RestApiInterceptor extends HandlerInterceptorAdapter {
             RenderUtil.renderJson(response,ResultUtil.setErrorResult("token或userId不存在"));
             return false;
         }
+
         return true;
     }
 

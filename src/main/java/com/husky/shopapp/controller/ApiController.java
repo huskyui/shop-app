@@ -1,18 +1,22 @@
 package com.husky.shopapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.base.Strings;
 import com.husky.shopapp.dto.CommentDto;
 import com.husky.shopapp.dto.NewsDto;
 import com.husky.shopapp.entity.*;
 import com.husky.shopapp.service.*;
+import com.husky.shopapp.util.JwtUtil;
 import com.husky.shopapp.util.ResultUtil;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.husky.shopapp.vo.UserTokenVO;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author husky
@@ -32,6 +36,8 @@ public class ApiController {
     private ICommentService commentService;
     @Resource
     private IGoodsService goodsService;
+    @Resource
+    private IUserService userService;
 
     /**
      * 获取录播图信息
@@ -146,4 +152,70 @@ public class ApiController {
                 .build();
     }
 
+    /**
+     * 登录
+     * */
+    @RequestMapping("/login")
+    public Result login(@RequestParam(value = "username",defaultValue = "")String username, @RequestParam(value = "password",defaultValue = "")String password){
+        if(Strings.isNullOrEmpty(username)||Strings.isNullOrEmpty(password)){
+            ResultUtil.setErrorResult("用户用户名或密码不能为空");
+        }
+        //匹配数据库
+        User user = userService.getOne(new QueryWrapper<User>().eq("username",username).eq("password",password));
+        if(Objects.isNull(user)){
+            return ResultUtil.setErrorResult("不存在该用户");
+        }
+        //成功就返回token
+        String token = JwtUtil.generateToken(user.getUsername(),user.getId());
+        UserTokenVO userTokenVO = UserTokenVO.builder()
+                .userId(user.getId())
+                .token(token)
+                .build();
+        return ResultUtil.setResult(Boolean.TRUE,"登录成功",userTokenVO);
+    }
+
+    /**
+     * 判断是否登录，是否过期
+     * */
+    @RequestMapping("/checkIsLogin")
+    public Result checkIsLogin(@RequestParam(value = "token",defaultValue = "")String token){
+        if(token.equals("")){
+            return ResultUtil.setErrorResult("token为空");
+        }
+        Integer id = JwtUtil.validateToken(token);
+        return ResultUtil.setResult(true,"成功",id);
+    }
+
+    /**
+     * 查看username是否存在
+     * */
+    @RequestMapping("/isExist")
+    public Result register(@RequestParam("username")String username){
+        User user = userService.getOne(new QueryWrapper<User>().eq("username",username));
+        if(!Objects.isNull(user)){
+            return ResultUtil.setErrorResult("用户名已经存在");
+        }
+        return ResultUtil.setSuccessResult("成功");
+    }
+
+    /**
+     * 注册
+     * */
+    @RequestMapping("/register")
+    public Result register(@RequestParam("username")String username,
+                           @RequestParam("password")String password,
+                           @RequestParam("email")String email,
+                           @RequestParam("birthday")String birthday) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-mm-dd").parse(birthday);
+        User user = new User();
+        user.setUsername(username);
+        user.setBirthday(date);
+        user.setEmail(email);
+        user.setPassword(password);
+        if(userService.save(user)) {
+            return ResultUtil.setSuccessResult("注册成功");
+        }else{
+            return ResultUtil.setErrorResult("注册失败");
+        }
+    }
 }
