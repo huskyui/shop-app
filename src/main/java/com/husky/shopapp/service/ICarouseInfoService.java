@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author huskyui
  * @since 2019-03-19
  */
-public interface ICarouseInfoService extends IService<CarouseInfo> {
+public interface  ICarouseInfoService extends IService<CarouseInfo> {
 
 }

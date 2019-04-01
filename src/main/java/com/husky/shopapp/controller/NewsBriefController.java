@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-03-21
  */
 @RestController
-@RequestMapping("/shopapp/news-brief")
+@RequestMapping("/news-brief")
 public class NewsBriefController {
 
 }

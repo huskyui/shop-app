@@ -39,6 +39,10 @@ public class RestApiInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         final String token = request.getHeader(JwtUtil.AUTH_HEADER);
+        String strUserId = request.getHeader(USER_ID);
+        if(Strings.isNullOrEmpty(strUserId)){
+            return false;
+        }
         final Integer userId = Integer.parseInt(request.getHeader(USER_ID));
         log.info("token:" + token);
         if(!Strings.isNullOrEmpty(token)){

@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * new表 前端控制器
+ * 商品详情 前端控制器
  * </p>
  *
  * @author huskyui
- * @since 2019-03-21
+ * @since 2019-04-01
  */
 @RestController
-@RequestMapping("/news")
-public class NewsController {
+@RequestMapping("/order-detail")
+public class OrderDetailController {
 
 }

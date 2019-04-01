@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-03-22
  */
 @RestController
-@RequestMapping("/shopapp/comment")
+@RequestMapping("/comment")
 public class CommentController {
 
 }

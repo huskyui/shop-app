@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-03-19
  */
 @RestController
-@RequestMapping("/shopapp/carouse-info")
+@RequestMapping("/carouse-info")
 public class CarouseInfoController {
 
 }
