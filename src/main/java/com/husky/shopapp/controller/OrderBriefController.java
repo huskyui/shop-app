@@ -10,6 +10,7 @@ import com.husky.shopapp.service.IOrderDetailService;
 import com.husky.shopapp.util.OrderUtil;
 import com.husky.shopapp.util.ResultUtil;
 import com.husky.shopapp.vo.GoodsVo;
+import com.husky.shopapp.vo.OrderVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -61,6 +62,16 @@ public class OrderBriefController {
                 .success(true)
                 .data(orderBriefList)
                 .msg("成功")
+                .build();
+    }
+
+    @RequestMapping("/getOrderInfo")
+    public Result getOrderInfo(@RequestParam("orderId")String orderId){
+        OrderVO orderVO = orderDetailService.getOrderVOByOrderId(orderId);
+        return Result.builder()
+                .success(true)
+                .data(orderVO)
+                .msg("获取成功")
                 .build();
     }
 
