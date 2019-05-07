@@ -57,7 +57,10 @@ public class OrderBriefController {
 
     @RequestMapping("/getOrderList")
     public Result getOrderList(@RequestParam("userId")Integer userId){
-        List<OrderBrief> orderBriefList = orderBriefService.list(new QueryWrapper<OrderBrief>().eq("user_id",userId).orderByDesc("createtime"));
+        List<OrderBrief> orderBriefList = orderBriefService
+                .list(new QueryWrapper<OrderBrief>()
+                .eq("user_id",userId)
+                .orderByDesc("createtime"));
         return Result.builder()
                 .success(true)
                 .data(orderBriefList)

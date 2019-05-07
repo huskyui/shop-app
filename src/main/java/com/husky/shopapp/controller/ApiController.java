@@ -156,12 +156,16 @@ public class ApiController {
      * 登录
      * */
     @RequestMapping("/login")
-    public Result login(@RequestParam(value = "username",defaultValue = "")String username, @RequestParam(value = "password",defaultValue = "")String password){
+    public Result login(@RequestParam(value = "username",defaultValue = "")String username,
+                        @RequestParam(value = "password",defaultValue = "")String password){
         if(Strings.isNullOrEmpty(username)||Strings.isNullOrEmpty(password)){
             ResultUtil.setErrorResult("用户用户名或密码不能为空");
         }
         //匹配数据库
-        User user = userService.getOne(new QueryWrapper<User>().eq("username",username).eq("password",password));
+        User user = userService
+                .getOne(new QueryWrapper<User>()
+                        .eq("username",username)
+                        .eq("password",password));
         if(Objects.isNull(user)){
             return ResultUtil.setErrorResult("不存在该用户");
         }
